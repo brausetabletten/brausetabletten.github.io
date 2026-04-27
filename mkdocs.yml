@@ -1,0 +1,10 @@
+site_name: Brausetablette's Game Dev Hobby Projects
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - AntiGrav Racer:
+      - Overview: antigrav-racer/index.md
+      - Devlog 001: antigrav-racer/devlog-001.md
