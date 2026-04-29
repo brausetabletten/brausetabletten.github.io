@@ -368,6 +368,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-i-roughly-expect-ai-vehicle-control-to-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How I roughly expect (AI) vehicle control to work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-conceptual-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Some conceptual problems
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -421,6 +443,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-i-roughly-expect-ai-vehicle-control-to-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How I roughly expect (AI) vehicle control to work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-conceptual-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Some conceptual problems
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -439,12 +483,18 @@
 
 
 <h1 id="devlog-001-track-segment-prototype">Devlog 001 – Track Segment Prototype</h1>
+<p>Although I am not sure that this is what the N64 and GC F-Zero games are doing (or more precisely: I am pretty sure this is not what they are doing), my idea was that the vehicles should move on a 2D parametrized manifold that is the track. In other words, the movement shall be constrained to the track mesh, as long as the vehicle is "on the track". As soon as a vehicle leaves the track, the movement shall be determined from the last velocity on the track and the global gravity, with some steering allowed.  </p>
 <h3 id="key-ideas">Key ideas:</h3>
 <ul>
-<li>Vehicle's' movement is confined on track segments</li>
+<li>Vehicle's movement is confined on track segments</li>
 <li>While on a track segment, "down" is defined locally =&gt; vehicles stick to the track</li>
-<li>The first type of track segments is parametrized by a longitudinal and a transversal parameter</li>
+<li>A track segment shall be defined by its endpoints positions and rotations. </li>
+<li>The track segments are parametrized by a longitudinal <code>l</code> and a transversal parameter <code>w</code> </li>
 </ul>
+<h3 id="how-i-roughly-expect-ai-vehicle-control-to-work">How I roughly expect (AI) vehicle control to work</h3>
+<p>First, if a vehicle is currently not on a track segment, it will try to find one using a raycast. Assuming that there is a segment underneath it, the local coordinates $(l,w)$ need to be determined. From them, the local forward and right direction of the track shall be computed. Thus, the track segments will implement <code>Vector3 Right(float l, float w)</code> and <code>Vector3 Forward(float l, float w)</code>. For orientation, the AI needs a guiding line on the segments, that can be the center line for now. From it, they can decide on a movement direction, that is projected on the local forward and right direction to update the parameter pair (l,w). The vehicle is then moved to this new position, obtained by the <code>WorldPosition(float l, float w)</code> method of the track segment.</p>
+<p>The new position might not be on the track segment anymore. If the segment has railing to prevent vehicles from overshooting, the movement needs to contain some bounce logic. Also, collisions with other vehicles need to be accounted for.    </p>
+<h3 id="some-conceptual-problems">Some conceptual problems</h3>
 <pre><code class="language-csharp">private (Vector3 A, Vector3 B, Vector3 C) GetCubicHermiteCoefficients(Vector3 X0, Vector3 X1, Vector3 T0, Vector3 T1)
 {
     Vector3 A = T0;
