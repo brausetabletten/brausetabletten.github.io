@@ -12,6 +12,8 @@
         <link rel="prev" href="../">
       
       
+        <link rel="next" href="../devlog-002/">
+      
       
         
       
@@ -21,7 +23,7 @@
     
     
       
-        <title>Devlog 001 - Brausetablette's Game Dev Hobby Projects</title>
+        <title>Devlog 001 - Peter's Game Dev Hobby Projects</title>
       
     
     
@@ -78,7 +80,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Brausetablette&#39;s Game Dev Hobby Projects" class="md-header__button md-logo" aria-label="Brausetablette's Game Dev Hobby Projects" data-md-component="logo">
+    <a href="../.." title="Peter&#39;s Game Dev Hobby Projects" class="md-header__button md-logo" aria-label="Peter's Game Dev Hobby Projects" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -92,7 +94,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Brausetablette's Game Dev Hobby Projects
+            Peter's Game Dev Hobby Projects
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -176,13 +178,13 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Brausetablette&#39;s Game Dev Hobby Projects" class="md-nav__button md-logo" aria-label="Brausetablette's Game Dev Hobby Projects" data-md-component="logo">
+    <a href="../.." title="Peter&#39;s Game Dev Hobby Projects" class="md-nav__button md-logo" aria-label="Peter's Game Dev Hobby Projects" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Brausetablette's Game Dev Hobby Projects
+    Peter's Game Dev Hobby Projects
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -410,6 +412,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devlog-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 002
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -526,7 +556,7 @@
 <p>While this seemed nice enough, there is no obvious way how the right and up direction shall be interpolated between the two waypoints. The only real condition they need to satisfy is that they shall be orthogonal to the tangent line <span class="arithmatex">\(\mathbf{T}(t)\)</span>. My initial idea was to use Unity's built-in ´Quaternion.Slerp´ to interpolate the rotations as quaternions between the points, to maintain a mathematical expression I can compute. But this does not guarantee the right and up directions to be orthogonal to the local forward direction defined by the center line's first derivative. The other way around, if I would compute the track segments such that their center line follows the forward obtained from ´Quaternion.Slerp´, the second waypoint cannot be placed freely (at least not easily, the system is over determined if not additional scaling is introduced). I decided that it is better to give up with the idea of having mathematical expressions for the up and right directions, and an analytical way to update the 3D movement on the track. Instead, I opted for interpolation from sampled values of up and right directions along the track. This means that I had to give up on the idea of having analytical expressions to update the vehicles position (although I soon realized that this idea wasn't all that well considered anyways).</p>
 <p>This also means that there is no analytical expression for distances between two points defined by the local coordinates <span class="arithmatex">\((l,w)\)</span>. What surprised me a bit more though was that there seems to be no closed-form expression to transform between <span class="arithmatex">\(l\)</span>, the position along the center line of the track segment measured in meters and the modelling parameter <span class="arithmatex">\(t\)</span>. Since I had already given up on the idea of having an almost-analytical racing game, I decided that interpolation from lookup tables would do just fine.</p>
 <h3 id="how-i-roughly-expect-ai-vehicle-control-to-work">How I roughly expect (AI) vehicle control to work</h3>
-<p>First, if a vehicle is currently not on a track segment, it will try to find one using a raycast. Assuming that there is a segment underneath it, the local coordinates <span class="arithmatex">\((l,w)\)</span> need to be determined. From them, the local forward and right direction of the track shall be computed. Thus, the track segments will implement <code>Vector3 Right(float l, float w)</code> and <code>Vector3 Forward(float l, float w)</code>. For orientation, the AI needs a guiding line on the segments, that can be the center line for now. From it, they can decide on a movement direction, that is projected on the local forward and right direction to update the parameter pair (l,w). The vehicle is then moved to this new position, obtained by the <code>WorldPosition(float l, float w)</code> method of the track segment.</p>
+<p>First, if a vehicle is currently not on a track segment, it will try to find one using a raycast. Assuming that there is a segment underneath it, the local coordinates <span class="arithmatex">\((l,w)\)</span> need to be determined. From them, the local forward and right direction of the track shall be computed. Thus, the track segments will implement <code>Vector3 Right(float l, float w)</code> and <code>Vector3 Forward(float l, float w)</code>. For orientation, the AI needs a guiding line on the segments, that can be the center line for now. From it, they can decide on a movement direction, that is projected on the local forward and right direction to update the parameter pair <span class="arithmatex">\((l,w)\)</span> The vehicle is then moved to this new position, obtained by the <code>WorldPosition(float l, float w)</code> method of the track segment.</p>
 <p>The new position might not be on the track segment anymore. If the segment has railing to prevent vehicles from overshooting, the movement needs to contain some bounce logic. Also, collisions with other vehicles need to be accounted for. </p>
 <h3 id="the-track-segment-interface">The Track Segment Interface</h3>
 <p>With these things considered, the interface for track segments I went with for now is</p>
