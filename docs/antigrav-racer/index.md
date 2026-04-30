@@ -8,3 +8,4 @@ The combination of very high velocities and complexe track geometries made me wo
 ## Devlogs
 
 - [Devlog 001 – Track Segement Conceptualization](devlog-001.md)
+- [Devlog 002 – Track Segement Prototype](devlog-002.md)

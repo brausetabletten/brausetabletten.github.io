@@ -1,4 +1,4 @@
-site_name: Brausetablette's Game Dev Hobby Projects
+site_name: Peter's Game Dev Hobby Projects
 
 theme:
   name: material
@@ -15,3 +15,4 @@ nav:
   - AntiGrav Racer:
       - Overview: antigrav-racer/index.md
       - Devlog 001: antigrav-racer/devlog-001.md
+      - Devlog 002: antigrav-racer/devlog-002.md
