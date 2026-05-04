@@ -440,6 +440,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devlog-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -536,8 +564,8 @@
 
 <h1 id="devlog-001-track-segment-conceptualization">Devlog 001 – Track Segment Conceptualization</h1>
 <p>There is a moment in F-Zero X, where the track suddenly ends and your vehicle drops onto a tube. Then, your vehicle sticks to this tube, and you can move around its curved surface area freely. This means you can drive on the downward facing surface, as if it was magnetic. At the same time, the speed of the vehicles stays at this insane level, and I kept wondering how this is achieved. I kept thinking of this, and decided to try out something:</p>
-<p>Although I am not sure that this is what the N64 and GC F-Zero games are doing (or more precisely: I am pretty sure this is not what they are doing), my idea was that the vehicles should move on a 2D parameterized manifold in 3D space that is the track. In other words, the movement shall be constrained to the track mesh, as long as the vehicle is "on the track". As soon as a vehicle leaves the track, the movement shall be determined from the last velocity on the track and the global gravity, with some steering allowed.  </p>
-<h3 id="key-ideas">Key ideas:</h3>
+<p>My idea was that if I have a well-behaved parametrization of the track segments, the position of the vehicles on them could be updated in a sort-of analytical fashion i.e. the parametrization should allow for a movement scheme in which based on the current position and the movement direction, a closed-form expression is used to compute the next position. The vehicles should thus move on a 2D parameterized manifold in 3D space that defines the track, without relying on mesh information like vertex positions. The mesh would only be the rendered representation of the parametrized track. The movement shall be constrained to the track, as long as the vehicle is "on the track". As soon as a vehicle leaves the track (e.g. by sudden jumps or by going over an edge without a railing), the movement shall be determined from the last velocity on the track and the global gravity, with some steering allowed.  </p>
+<h2 id="key-ideas">Key ideas:</h2>
 <ul>
 <li>Vehicle's movement is confined on track segments of length <span class="arithmatex">\(L\)</span> and a variable width <span class="arithmatex">\(W\)</span></li>
 <li>While on a track segment, "down" is defined locally <span class="arithmatex">\(\Rightarrow\)</span> vehicles stick to the track</li>
@@ -545,20 +573,20 @@
 <li>The track segments are parameterized by a longitudinal <span class="arithmatex">\(l\in[0,L]\)</span> and a transversal parameter <span class="arithmatex">\(w\in[-W(l)/2,W(l)/2]\)</span></li>
 <li>The movement is updated in the <span class="arithmatex">\((l,w)\)</span> space while vehicles are on the track</li>
 </ul>
-<h3 id="initial-ideas-and-conceptual-problems">Initial ideas and conceptual problems</h3>
+<h2 id="initial-ideas-and-conceptual-problems">Initial ideas and conceptual problems</h2>
 <p>My core motivation was the mathematical problem of updating the vehicles positions. When I made the decision to build a prototype, I thought it would be possible to have an analytical solution for the movement on the track segments, if their parametrization is chosen properly. I aim to avoid barycentric coordinates, and while I am pretty certain that on segments defined by width, curve radius and global rotation an closed-form solution for movement without collisions exists, elements like this are most likely pretty restrictive in terms of geometry that can be achieved.</p>
 <p>I figured that a nice editor workflow would be to place waypoints, rotate them, and then have them connected by an automized track generation routine. From these waypoints, I want to use the position <span class="arithmatex">\(\mathbf{X}_i\)</span> and their forward direction <span class="arithmatex">\(\mathbf{f}_i\)</span>, which gives me four vectors. Thus, the model for the track's center line needs 4 vectorial degrees of freedoms, which means two waypoints can be connected by the curve </p>
 <div class="arithmatex">\[ \mathbf{X}(t)= \mathbf{X}_0 + t\mathbf{A} + t^2\mathbf{B} + t^3\mathbf{C}\]</div>
 <p>so that <span class="arithmatex">\(\mathbf{X}(0)\)</span> and <span class="arithmatex">\(\mathbf{X}(1)\)</span> lie on the waypoints. Now, instead of using only the forward direction of the waypoints to match the first derivative, a scaling parameter can be introduced that allows to change the curvature of the track segments. The tangent line <span class="arithmatex">\(\mathbf{T}(t) = \mathbf{X}'(t)\)</span> shall then match the scaled forward directions <span class="arithmatex">\(\mathbf{T}_i=\zeta\mathbf{f}_i\)</span> at <span class="arithmatex">\(t=0\)</span> and <span class="arithmatex">\(t=1\)</span>. Then, we end up with </p>
 <div class="arithmatex">\[\mathbf{A}=\mathbf{T}_0\]</div>
 <div class="arithmatex">\[\mathbf{B}=3(\mathbf{X}_1-\mathbf{X}_0)-2\mathbf{T}_0-\mathbf{T}_1\]</div>
-<div class="arithmatex">\[\mathbf{C}=\mathbf{T}_0 + \mathbf{T}_1 - 2(\mathbf{X}_1-\mathbf{X}_0)\]</div>
+<div class="arithmatex">\[\mathbf{C}=\mathbf{T}_0 + \mathbf{T}_1 - 2(\mathbf{X}_1-\mathbf{X}_0).\]</div>
 <p>While this seemed nice enough, there is no obvious way how the right and up direction shall be interpolated between the two waypoints. The only real condition they need to satisfy is that they shall be orthogonal to the tangent line <span class="arithmatex">\(\mathbf{T}(t)\)</span>. My initial idea was to use Unity's built-in ´Quaternion.Slerp´ to interpolate the rotations as quaternions between the points, to maintain a mathematical expression I can compute. But this does not guarantee the right and up directions to be orthogonal to the local forward direction defined by the center line's first derivative. The other way around, if I would compute the track segments such that their center line follows the forward obtained from ´Quaternion.Slerp´, the second waypoint cannot be placed freely (at least not easily, the system is over determined if not additional scaling is introduced). I decided that it is better to give up with the idea of having mathematical expressions for the up and right directions, and an analytical way to update the 3D movement on the track. Instead, I opted for interpolation from sampled values of up and right directions along the track. This means that I had to give up on the idea of having analytical expressions to update the vehicles position (although I soon realized that this idea wasn't all that well considered anyways).</p>
 <p>This also means that there is no analytical expression for distances between two points defined by the local coordinates <span class="arithmatex">\((l,w)\)</span>. What surprised me a bit more though was that there seems to be no closed-form expression to transform between <span class="arithmatex">\(l\)</span>, the position along the center line of the track segment measured in meters and the modelling parameter <span class="arithmatex">\(t\)</span>. Since I had already given up on the idea of having an almost-analytical racing game, I decided that interpolation from lookup tables would do just fine.</p>
-<h3 id="how-i-roughly-expect-ai-vehicle-control-to-work">How I roughly expect (AI) vehicle control to work</h3>
+<h2 id="how-i-roughly-expect-ai-vehicle-control-to-work">How I roughly expect (AI) vehicle control to work</h2>
 <p>First, if a vehicle is currently not on a track segment, it will try to find one using a raycast. Assuming that there is a segment underneath it, the local coordinates <span class="arithmatex">\((l,w)\)</span> need to be determined. From them, the local forward and right direction of the track shall be computed. Thus, the track segments will implement <code>Vector3 Right(float l, float w)</code> and <code>Vector3 Forward(float l, float w)</code>. For orientation, the AI needs a guiding line on the segments, that can be the center line for now. From it, they can decide on a movement direction, that is projected on the local forward and right direction to update the parameter pair <span class="arithmatex">\((l,w)\)</span> The vehicle is then moved to this new position, obtained by the <code>WorldPosition(float l, float w)</code> method of the track segment.</p>
 <p>The new position might not be on the track segment anymore. If the segment has railing to prevent vehicles from overshooting, the movement needs to contain some bounce logic. Also, collisions with other vehicles need to be accounted for. </p>
-<h3 id="the-track-segment-interface">The Track Segment Interface</h3>
+<h2 id="the-track-segment-interface">The Track Segment Interface</h2>
 <p>With these things considered, the interface for track segments I went with for now is</p>
 <pre><code class="language-csharp">public interface ITrackSegment
 {

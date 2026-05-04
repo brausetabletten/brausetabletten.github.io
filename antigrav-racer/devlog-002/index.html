@@ -12,6 +12,8 @@
         <link rel="prev" href="../devlog-001/">
       
       
+        <link rel="next" href="../devlog-003/">
+      
       
         
       
@@ -335,6 +337,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 002
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -352,6 +372,86 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-local-reference-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The local reference frame
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-tests-and-a-problem-with-physical-lengths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit tests and a problem with physical lengths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-in-the-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage in the editor
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devlog-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -384,6 +484,47 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-local-reference-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The local reference frame
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-tests-and-a-problem-with-physical-lengths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit tests and a problem with physical lengths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-in-the-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage in the editor
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -400,61 +541,105 @@
 
 
 <h1 id="devlog-002-track-segment-prototype">Devlog 002 – Track Segment Prototype</h1>
-<p><img src="figures/track_tester.jpg" width="100%"></p>
 <video controls width="100%">
   <source src="videos/segment_generation.mp4" type="video/mp4">
 </video>
 
-<p><img src="figures/track_tester.jpg" width="100%"></p>
-<div style="display: flex; gap: 10px;">
-  <div style="text-align: center;">
-    <img src="figures/straight_not_corrected.jpg" width="100%">
-    <p><em>Before correction</em></p>
-  </div>
-  <div style="text-align: center;">
-    <img src="figures/straight_corrected.jpg" width="100%">
-    <p><em>After correction</em></p>
-  </div>
-</div>
-
-<pre><code class="language-csharp">int substeps = 2;
-for (int j = 0; j &lt; substeps; j++)
+<p>This short video shows the early prototype of track segments. They are generated based on the position and orientation of two reference points (<code>TrackConnectionPoint</code>). The yellow line that is visible in the clip is the central line, connecting the reference points such that the forward direction of the line matches the forward direction of the reference points. There is also a scaling factor that can be changed to adjust the slope and curvature of the track segment.</p>
+<h2 id="the-local-reference-frame">The local reference frame</h2>
+<p>The first type of track segments I implemented are based on a cubic Hermite spline. I start off with a short recap: the center line </p>
+<div class="arithmatex">\[ \mathbf{X}(t)= \mathbf{X}_0 + t\mathbf{A} + t^2\mathbf{B} + t^3\mathbf{C}\]</div>
+<p>connects the two points <span class="arithmatex">\(\mathbf{X}_0\)</span> and <span class="arithmatex">\(\mathbf{X}_1\)</span> such that <span class="arithmatex">\(\mathbf{X}(0)=\mathbf{X}_0\)</span> and <span class="arithmatex">\(\mathbf{X}(1)=\mathbf{X}_1\)</span>. The tangent line <span class="arithmatex">\(\mathbf{T}(t) = \mathbf{X}'(t)\)</span> shall match the scaled forward directions <span class="arithmatex">\(\mathbf{T}_i=\zeta\mathbf{f}_i\)</span> at <span class="arithmatex">\(t=0\)</span> and <span class="arithmatex">\(t=1\)</span>, so that <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span> are </p>
+<div class="arithmatex">\[\mathbf{A}=\mathbf{T}_0\]</div>
+<div class="arithmatex">\[\mathbf{B}=3(\mathbf{X}_1-\mathbf{X}_0)-2\mathbf{T}_0-\mathbf{T}_1\]</div>
+<div class="arithmatex">\[\mathbf{C}=\mathbf{T}_0 + \mathbf{T}_1 - 2(\mathbf{X}_1-\mathbf{X}_0).\]</div>
+<p>From the tangent line, the forward direction is defined by <span class="arithmatex">\(\mathbf{f}(t)=\mathbf{T}(t)/|\mathbf{T}(t)|\)</span>. Finding a way to handle the local up and right direction was more challenging, however. I tried to come up with a closed-form expression for some time, but resorted to a parallel transport approximation, where the up direction is forward propagated and the error distribution backwards: the track is sampled <span class="arithmatex">\(N\)</span> times, and the start point's up vector <span class="arithmatex">\(\mathbf{u}_0\)</span> is turned around the the axis <span class="arithmatex">\(\mathbf{f}_i\times\mathbf{f}_{i+1}/|\mathbf{f}_i\times\mathbf{f}_{i+1}|\)</span> proportional to the angle between consecutive <span class="arithmatex">\(\mathbf{f}_i\)</span>s. The local up is then corrected, so that <span class="arithmatex">\(\mathbf{f}_i\cdot\mathbf{u}_i=0\)</span>. In all likelihood, this won't match the up direction of the second reference point <span class="arithmatex">\(\mathbf{u}_{N-1}\)</span> and the mismatch angle is distributed amongst the up samples <span class="arithmatex">\(\mathbf{u}_i\)</span> for <span class="arithmatex">\(i\in[1,N-2]\)</span> by turning them around <span class="arithmatex">\(\mathbf{f}_i\)</span>. </p>
+<p>The missing direction, the local right, is then <span class="arithmatex">\(\mathbf{r}_i=\mathbf{u}_i\times\mathbf{f}_i\)</span>, since Unity uses a left-handed coordinate system.</p>
+<h2 id="unit-tests-and-a-problem-with-physical-lengths">Unit tests and a problem with physical lengths</h2>
+<p>Now, the local reference frame on the track is defined at all sample points and can be interpolated between them. Although I found this slightly unsatisfying, I decided that it would do for a prototype and moved on to testing: </p>
+<p><img src="figures/testing.jpg" width="100%"></p>
+<p>Let's look more closely at the tests for the straight lines: </p>
+<pre><code class="language-csharp">public TrackSegment CreateStraightSegment()
 {
-    float dti = Time.deltaTime / (float)substeps;
-    (l1, w1, onTrack) = segment.UpdatePosition((l0, w0), (vl, vw), speed * dti);
+    var go = new GameObject();
+    var segment = go.AddComponent&lt;TrackSegment&gt;();
 
-    f = segment.Forward(l1, w1);
-    r = segment.Right(l1, w1);
-    u = segment.Up(l1, w1);
+    var start = new GameObject().AddComponent&lt;TrackConnectionPoint&gt;();
+    var end = new GameObject().AddComponent&lt;TrackConnectionPoint&gt;();
 
-    vl = Vector3.Dot(f, transform.forward);
-    vw = Vector3.Dot(r, transform.forward);
+    float L = 100f;
+    start.position = Vector3.zero;
+    end.position = new Vector3(0, 0, L);
 
-    l0 = l1;
-    w0 = w1;
+    start.rotation = Quaternion.LookRotation(Vector3.forward);
+    end.rotation = Quaternion.LookRotation(Vector3.forward);
+
+    segment.start = start;
+    segment.end = end;
+    segment.startSlopeFactor = L;
+    segment.endSlopeFactor = L;
+
+    segment.SendMessage(&quot;Generate&quot;);
+
+    return segment;
 }
 </code></pre>
-<pre><code class="language-csharp">public (float l1, float w1, bool onTrack) UpdatePosition((float, float) pos0, (float, float) dir, float dist)
+<p>The scaling factor for the slopes (<span class="arithmatex">\(\zeta\)</span> in the formulas) is set equal to the segments length. I did so intuitively, but there is a conceptual problem hidden here: for a straight element, if the beginning and end slope are equal to the elements length, then an equidistant sampling of <span class="arithmatex">\(t\)</span> into <span class="arithmatex">\(N-1\)</span> intervals results in an even spacing of samples along the center line in terms of the physical length </p>
+<div class="arithmatex">\[L(t)=\int_0^{t} \|\mathbf{T}(t')\| \, \mathrm{d}t'\]</div>
+<p>If <code>segment.startSlopeFactor</code> and/or <code>segment.endSlopeFactor</code> were to be changed, this would no longer be true. This is fairly evident if we look at the definitions of <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(C\)</span>, which which one might assume would cancel out for a straight line (surely I did); but the only do so when <span class="arithmatex">\(\zeta=L\)</span> and <span class="arithmatex">\(\mathbf{X}_1-\mathbf{X}_0=\mathbf{T}_0=\mathbf{T}_1\)</span>. </p>
+<p>At this point, the reference frame samples <span class="arithmatex">\((\mathbf{u}_i,\mathbf{r}_i)\)</span> were taken at equidistant spacing in <span class="arithmatex">\(t\)</span>, the spline parameter. To keep everything consistent, the sample points <span class="arithmatex">\(t_i\)</span> are also where mesh vertices are located. This means that the distance between vertices is not equidistant in terms of the physical length <span class="arithmatex">\(L(t)\)</span> though. If we look a bit into the future, this is most likely at least annoying. It relates to UVs as well and if the generated track segments shall use generic textures, this would result in heavy distortion of these textures. </p>
+<p>I thus redistributed the sample points <span class="arithmatex">\(t_i\)</span> of the spline parameter <span class="arithmatex">\(t\)</span>. Since <span class="arithmatex">\(t\)</span> does not represent physical length, it is an internal parameter on track segments build on cubic Hermite splines. The more meaningful parameter <span class="arithmatex">\(l\in[0,L]\)</span> is what is supposed to be used in the vehicle logic and measures the actual distance along the center line. The <span class="arithmatex">\(t_i\)</span>s are chosen so that they result in a sampling of <span class="arithmatex">\(dl=L/(N-1)\)</span> along <span class="arithmatex">\(\mathbf{X}(t)\)</span> and the conversion between <span class="arithmatex">\(t\)</span> and <span class="arithmatex">\(l\)</span> is handled by interpolation form lookup table values internally.</p>
+<h2 id="usage-in-the-editor">Usage in the editor</h2>
+<p>By now, generating the mesh in the editor became to costly to do it simply by having the <code>[ExecuteAlways]</code> attribute. Instead, the <code>TrackConnectionPoint</code> allows for subscription to the <code>onChanged</code> Action, so that the track segments are only generated when the reference points are changed around.</p>
+<pre><code class="language-csharp">[ExecuteAlways]
+public class TrackConnectionPoint : MonoBehaviour
 {
-    (float l0, float w0) = pos0;
-    (float ml, float mw) = dir;
+    public float width = 10f;
 
-    float l1 = l0 + dist * ml;
-    float w1 = w0 + dist * mw;
+    public Vector3 position { get =&gt; transform.position; set =&gt; transform.position = value; }
+    public Quaternion rotation { get =&gt; transform.rotation; set =&gt; transform.rotation = value; }
+    public Vector3 forward { get =&gt; transform.forward; }
+    public Vector3 right { get =&gt; transform.right; }
+    public Vector3 up { get =&gt; transform.up; }
 
-    float arc = ApproxCurveLength((l0, w0), (l1, w1), 1);
-    float corr = arc / dist;
-    corr = float.IsNaN(corr) ? 0f : corr;
+    public System.Action onChanged;
 
-    l1 = l0 + (l1 - l0) / corr;
-    w1 = w0 + (w1 - w0) / corr;
+    private Vector3 lastPosition;
+    private Quaternion lastRotation;
 
-    return (l1, w1, Mathf.Abs(w1) &lt; 0.5f * Width(l1) &amp;&amp; l1 &lt;= length &amp;&amp; l1 &gt;= 0f);
+    public void OnEnable()
+    {
+        lastPosition = transform.position;
+        lastRotation = transform.rotation;
+    }
+
+
+    public void Update()
+    {
+# if UNITY_EDITOR
+        if (HasChanged())
+            onChanged?.Invoke();
+# endif
+    }
+
+    private bool HasChanged()
+    {
+        float pTol = 0.001f;
+        float rTol = 0.01f;
+
+        float dp = (transform.position - lastPosition).magnitude;
+        float dr = Quaternion.Angle(transform.rotation, lastRotation);
+        if (dp &gt; pTol || dr &gt; rTol)
+        {
+            lastPosition = transform.position;
+            lastRotation = transform.rotation;
+            return true;
+        }
+        else
+            return false;
+    }
 }
 </code></pre>
-<video controls width="100%">
-  <source src="videos/ai_no_collision_logic_race.mp4" type="video/mp4">
-</video>
 
 
 
