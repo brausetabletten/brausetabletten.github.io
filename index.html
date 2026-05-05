@@ -203,6 +203,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
@@ -219,6 +237,36 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#most-recent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Most Recent
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -410,6 +458,25 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#most-recent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Most Recent
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -429,6 +496,15 @@
 <p>On this website, I will blog a bit about some of my hobby game dev projects.</p>
 <p>The focus will be, for now, on a small anti-grav racer, that I am currently working on. 
 I was playing F-Zero X and F-Zero GX with friends last summer and was fascinated by the physics of these games. This motivated me to try to implement a few things on my own. </p>
+<h2 id="most-recent">Most Recent</h2>
+<ul>
+<li><a href="antigrav-racer/devlog-003/">Devlog 003 - AI Movement Prototype</a></li>
+</ul>
+<video controls width="100%">
+  <source src="antigrav-racer/devlog-003/videos/ai_no_collision_logic_race.mp4" type="video/mp4">
+</video>
+
+<p>In this short video, simple AI agents are racing along the track, using the center line for guidance. The movement is updated in local coordinate space <span class="arithmatex">\((l,w)\)</span> rather than in world space. There is no collision logic yet, and if vehicles were to leave the track, they would simply become stuck. To prevent the latter, they can strafe and will do so when they notice that the lateral parameter <span class="arithmatex">\(w\)</span>, measuring the distance to the center line, is becoming too large.</p>
 
 
 
