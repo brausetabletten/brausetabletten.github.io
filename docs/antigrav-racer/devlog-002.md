@@ -66,7 +66,7 @@ If `segment.startSlopeFactor` and/or `segment.endSlopeFactor` were to be changed
 
 At this point, the reference frame samples $(\mathbf{u}_i,\mathbf{r}_i)$ were taken at equidistant spacing in $t$, the spline parameter. To keep everything consistent, the sample points $t_i$ are also where mesh vertices are located. This means that the distance between vertices is not equidistant in terms of the physical length $L(t)$ though. If we look a bit into the future, this is most likely at least annoying. It relates to UVs as well and if the generated track segments shall use generic textures, this would result in heavy distortion of these textures. 
 
-I thus redistributed the sample points $t_i$ of the spline parameter $t$. Since $t$ does not represent physical length, it is an internal parameter on track segments build on cubic Hermite splines. The more meaningful parameter $l\in[0,L]$ is what is supposed to be used in the vehicle logic and measures the actual distance along the center line. The $t_i$s are chosen so that they result in a sampling of $dl=L/(N-1)$ along $\mathbf{X}(t)$ and the conversion between $t$ and $l$ is handled by interpolation form lookup table values internally.
+I thus redistributed the sample points $t_i$ of the spline parameter $t$. Since $t$ does not represent physical length, it is an internal parameter on track segments build on cubic Hermite splines. The more meaningful parameter $l\in[0,L]$ is what is supposed to be used in the vehicle logic and measures the actual distance along the center line. The $t_i$s are chosen so that they result in a sampling of $\Delta l=L/(N-1)$ along $\mathbf{X}(t)$ and the conversion between $t$ and $l$ is handled by interpolation form lookup table values internally.
 
 ## Usage in the editor
 
