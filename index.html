@@ -431,6 +431,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="antigrav-racer/devlog-004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 004
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -498,13 +526,13 @@
 I was playing F-Zero X and F-Zero GX with friends last summer and was fascinated by the physics of these games. This motivated me to try to implement a few things on my own. </p>
 <h2 id="most-recent">Most Recent</h2>
 <ul>
-<li><a href="antigrav-racer/devlog-003/">Devlog 003 - AI Movement Prototype</a></li>
+<li><a href="antigrav-racer/devlog-004/">Devlog 004 - Collision Handling Prototype</a></li>
 </ul>
 <video controls width="100%">
-  <source src="antigrav-racer/devlog-003/videos/ai_no_collision_logic_race.mp4" type="video/mp4">
+  <source src="antigrav-racer/devlog-004/videos/ai_collision_race.mp4" type="video/mp4">
 </video>
 
-<p>In this short video, simple AI agents are racing along the track, using the center line for guidance. The movement is updated in local coordinate space <span class="arithmatex">\((l,w)\)</span> rather than in world space. There is no collision logic yet, and if vehicles were to leave the track, they would simply become stuck. To prevent the latter, they can strafe and will do so when they notice that the lateral parameter <span class="arithmatex">\(w\)</span>, measuring the distance to the center line, is becoming too large.</p>
+<p>Building on the simple AI movement prototype, vehicle collisions were introduced to the game logic. Instead of relying on Unity's general purpose physics engine, I started to implement my own (more simplistic) physics logic. The vehicles are now equipped with a custom box-collider and a collision handler checks for overlap between these boxes in the LateUpdate cycle. Overlapping vehicles are separated by an iterative scheme. </p>
 
 
 

@@ -1,0 +1,925 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../devlog-003/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Devlog 004 - Peter's Game Dev Hobby Projects</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#devlog-004-collision-handling-prototype" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Peter&#39;s Game Dev Hobby Projects" class="md-header__button md-logo" aria-label="Peter's Game Dev Hobby Projects" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Peter's Game Dev Hobby Projects
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Devlog 004
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Peter&#39;s Game Dev Hobby Projects" class="md-nav__button md-logo" aria-label="Peter's Game Dev Hobby Projects" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Peter's Game Dev Hobby Projects
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AntiGrav Racer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AntiGrav Racer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devlog-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 001
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devlog-002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 002
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devlog-003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 004
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devlog 004
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation-and-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivation and Perspective
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#separating-axis-for-box-colliders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Separating Axis for Box Colliders
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolving-overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolving Overlap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next-for-collision-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's next for collision handling?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#something-extra-radial-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Something Extra: Radial Points
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation-and-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivation and Perspective
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#separating-axis-for-box-colliders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Separating Axis for Box Colliders
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolving-overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolving Overlap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next-for-collision-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's next for collision handling?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#something-extra-radial-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Something Extra: Radial Points
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="devlog-004-collision-handling-prototype">Devlog 004 – Collision Handling Prototype</h1>
+<video controls width="100%">
+  <source src="videos/ai_collision_race.mp4" type="video/mp4">
+</video>
+
+<p>Building on the simple AI movement prototype, vehicle collisions were introduced to the game logic. Instead of relying on Unity's general purpose physics engine, I started to implement my own (more simplistic) physics logic. The vehicles are now equipped with a custom box-collider and a collision handler checks for overlap between these boxes in the LateUpdate cycle. Overlapping vehicles are separated by an iterative scheme. </p>
+<h2 id="motivation-and-perspective">Motivation and Perspective</h2>
+<p>The driving reason behind this decision to write a custom physics engine is that the movement of grounded vehicles is restricted to the track and solved in the 2D <span class="arithmatex">\((l,w)\)</span>-coordinate space of the tracks. Rigidbody physics would interfere with this movement logic (and I have little intention of controlling the movement of the vehicles via the 2nd derivative i.e. the forces acting on them). </p>
+<p>I aim for an arcady experience, and I imagine the game's systems to function rather simplistic. Collisions on vehicles might introduce some torque to them in the long run, but currently, I only aim to resolve the overlap of colliding vehicles. That being said, I aim for a visual damage system by separating vehicles into components, and moving from a collider around the entire vehicle to a set of colliders that correspond to the components. On impact, they can be scratched and deformed through texture work (including bump-up mapping) and maybe even compressed along a specific axis.</p>
+<p>However, this remains a vision for now. The more immediate issue is to bring some structure into the physics systems: There will be three kinds of collisions. </p>
+<ul>
+<li>First, vehicles can collide with other vehicles (this is what this blog post is dealing with). </li>
+<li>Second, vehicles can collide with the railing of the tracks. This will be handled by the stepping logic directly and is currently included by simply clamping the movement along the lateral parameter <span class="arithmatex">\(w\)</span>. The effect can be seen using the <code>TrackTester</code> introduced last time around. This is not a proper solution for railing collisions, but serves to illustrate the idea of handling them inside the <code>TrackSegment.UpdatePosition</code> method. </li>
+<li>Last, vehicles can fall from the track if there is no railing, or they are sent flying by jumps in the track. In such a case, the vehicle might collide with scenery. Such collisions shall result in the instant destruction of the player vehicle. Life is punishing, after all.</li>
+</ul>
+<p><img src="figures/track_railing_sloppy.jpg" width="100%"></p>
+<h2 id="separating-axis-for-box-colliders">Separating Axis for Box Colliders</h2>
+<p>While I was considering to build a prototype, I had mainly thought of how the track parametrization shall be done and how movement could be handled. On the other hand, I hadn't thought so much about collision handling. I knew I wanted to handle railing collisions in the tracks local coordinate space when time-stepping the movement but I hadn't thought too much about scenery or vehicle-with-vehicle collisions. I was pretty certain that Unity would have all the necessary features built into the Collider component, even if I would not use the rigidbody system. This seems not to be the case, however, and so I started to read up on collision detection:</p>
+<p>For the time being, the AI vehicles are boxes. To check whether or not two boxes are overlapping, the Separating Axis Theorem (SAT) based on the <a href="https://en.wikipedia.org/wiki/Hyperplane_separation_theorem">Hyperplane separation theorem</a> can be used. The general idea is the following. If two boxes are separated, there exists a plane in-between them i.e. there is a plane that defines two half spaces such that each half space contains one box only. If such a plane can be found, the two boxes are separated. </p>
+<p>There is another way to think about this: If we would project the set <span class="arithmatex">\(B_i\)</span> that are the boxes on an axis <span class="arithmatex">\(\textbf{a}\)</span>, their projections might overlap. This is determined by comparing the <a href="https://en.wikipedia.org/wiki/Support_function">support function</a></p>
+<div class="arithmatex">\[h^\text{max}_i=\text{sup}\lbrace \mathbf{x}\cdot\mathbf{b} : \mathbf{b}\in B_i \rbrace\]</div>
+<p>and </p>
+<div class="arithmatex">\[h^\text{min}_i=\text{inf}\lbrace \mathbf{x}\cdot\mathbf{b} : \mathbf{b}\in B_i \rbrace.\]</div>
+<p>If an axis <span class="arithmatex">\(\textbf{a}\)</span> can be found on which there is no overlap, the two boxes are separated. Note that all these statements are true for convex sets. </p>
+<p>These ideas are equivalent when thinking in terms of <a href="https://en.wikipedia.org/wiki/Supporting_hyperplane">Supporting Hyperplanes</a>. We can find a point <span class="arithmatex">\(\textbf{S}\)</span> on the box's surface along the direction <span class="arithmatex">\(\mathbf{d}\)</span> such that a plane orthogonal to <span class="arithmatex">\(\mathbf{d}\)</span> contains at least <span class="arithmatex">\(\textbf{S}\)</span>, and all of the box is on one side of the plane. </p>
+<p>Such a point can be found by asking what point in the support function results in the supremum and for a box, the only candidates are the corner points. Overlap along an axis is can be tested like this then:</p>
+<pre><code class="language-csharp">private Vector3 SupportPoint(Vector3 direction)
+{
+    direction.Normalize();
+
+    float dx = Vector3.Dot(direction, right);
+    float dy = Vector3.Dot(direction, up);
+    float dz = Vector3.Dot(direction, forward);
+
+    float hx = 0.5f * a;
+    float hy = 0.5f * b;
+    float hz = 0.5f * c;
+
+    Vector3 edge = right*Mathf.Sign(dx)*hx + up*Mathf.Sign(dy)*hy + forward*Mathf.Sign(dz)*hz;
+    return edge + center;
+}
+
+public (float min, float max) Support(Vector3 axis)
+{
+    axis.Normalize();
+
+    float a = Vector3.Dot(axis, SupportPoint(axis));
+    float b = Vector3.Dot(axis, SupportPoint(-axis));
+
+    return (Mathf.Min(a, b), Mathf.Max(a, b));
+} 
+
+public bool SupportOverlap(IVehicleCollider other, Vector3 axis)
+{
+    (float min1, float max1) = Support(axis);
+    (float min2, float max2) = other.Support(axis);
+
+    return max1 &gt;= min2 &amp;&amp; min1 &lt;= max2;
+}
+</code></pre>
+<p>The question now is, which axis should be tested. In 2D, for collision detection between two rectangle, separating lines might be found parallel to the edges. In 3D however, there are cases in which it is not sufficient to test along the face normals only. Such a case is shown here:</p>
+<div style="display: flex; gap: 10px;">
+  <div style="text-align: center;">
+    <img src="figures/overlap_pseudo2D.jpg" width="100%">
+    <p><em>Overlap test along face normals only</em></p>
+  </div>
+  <div style="text-align: center;">
+    <img src="figures/overlap_3D.jpg" width="100%">
+    <p><em>Overlap test including edge cross products</em></p>
+  </div>
+</div>
+
+<p>In these images, black lines indicate the axes along which the overlap is tested. Red shows the projection of the boxes onto these axes. When the tests are only done along the face normals, the projections always overlap. Only if the cross products of edges are included, an axis is found along which the two boxes appear separated. </p>
+<p>For simple boxes, this means that for collision query, we have to check 6+9 axes for every collider (3 face normals per box, and 3x3 cross products of two edges, one from each box). However, while the vehicles are on the track, checks along the forward and right direction are practically sufficient.</p>
+<h2 id="resolving-overlap">Resolving Overlap</h2>
+<p>While this answers the question how collisions can be detected, it does not immediately help to resolve these collisions. For the current AI behavior, collisions mainly occur while the vehicles drive in the same direction (watch the boxes fading into each other in <a href="../devlog-003/">Devlog 003 - AI Movement Prototype</a>). I gather that a usual approach is to determine the impact normal amongst the face normals as the direction of minimal penetration, and the separate the boxes along this axis. To prevent them from getting locked at small corner overlaps, I wanted to separate them along the line connecting the box centers instead. For a simple procedure, that does not allow for torque, the solution more consistent with the model chosen was to project the smallest overlap along one of the boxes main axes onto the center-to-center line. </p>
+<p>The collisions are resolved as follows: In every frame, during the Update-cycle, the vehicles will be moved along the track. Then, in the LateUpdate-cycle, the <code>CollisionHandler</code> will determine whether there are overlaps between the vehicle's colliders. Then, overlapping vehicles will be separated according to their overlap, estimated from the smallest face-normal overlap projected onto the center-to-center line. The vehicles are separated by using the <code>ConstraintMove(Vector3 direction)</code> method that handles the translation in the track's <span class="arithmatex">\((l,w)\)</span> parameter space rather than in 3D world space (if the vehicle is grounded, that is). The total overlap is split according to the vehicle masses.  </p>
+<p>By the described scheme, new overlaps might be introduced: vehicle A might be pushed back to resolve an overlap with vehicle B, only to end up being overlapped with vehicle C. Also, the constraint movement might not push one of the vehicle sufficiently far - a railing might prevent this. For this reason, the procedure is repeated up to five times. If no more overlaps are found, the Collision Handler will break. In the little test run shown in the video at the top of the page, the statistics are</p>
+<pre><code>1 Iteration : 497
+2 Iterations : 85
+3 Iterations : 10
+4 Iterations : 1
+5 Iterations : 2
+</code></pre>
+<p>Naturally, due to the bare-bones state everything is in currently, this has only limited meaning. The Collision Handler currently reads like this:</p>
+<pre><code class="language-csharp">public class CollisionHandler : Singleton&lt;CollisionHandler&gt;
+{
+    private RaceController raceController;
+    private List&lt;IVehicle&gt; vehicles { get =&gt; raceController?.vehicles; }
+
+    public void Start()
+    {
+        raceController = GameController.instance.raceController;
+    }
+
+    public void LateUpdate()
+    {
+        Resolve();
+    }
+
+    private void Resolve()
+    {
+        int maxIter = 5;
+        int iter = 0;
+        for (int i=0; i&lt;maxIter; i++)
+        {
+            var overlaps = GetOverlaps();
+
+            // stop routine if there are no more overlaps
+            if (overlaps.Count &lt; 1)
+            {
+                break;
+            }
+            iter = i + 1;
+
+            // resolve step
+            foreach (var ovlp in overlaps)
+            {
+                var veh1 = ovlp.Item1;
+                var veh2 = ovlp.Item2;
+
+                var dir = veh2.position - veh1.position;
+                if (dir.sqrMagnitude &lt; 0.0001f)
+                    dir = veh1.forward;
+                else
+                    dir.Normalize();
+
+                Span&lt;Vector3&gt; axes = stackalloc Vector3[]
+                {
+                    veh1.right,
+                    veh1.forward,
+                    veh2.right,
+                    veh2.forward
+                };
+
+                float minProj = 0.1f;
+                float requiredMove = float.PositiveInfinity;
+
+                // Search minimal overlap
+                foreach (var ax in axes)
+                {
+                    var axis = ax;
+                    float proj = Vector3.Dot(dir, axis);
+                    axis *= Mathf.Sign(proj);
+
+                    // Ignore nearly orthogonal constraints
+                    if (Mathf.Abs(proj) &lt; minProj)
+                        continue;
+
+                    // projection overlap
+                    var extend1 = veh1.vehicleCollider.SupportPoint(axis);
+                    var extend2 = veh2.vehicleCollider.SupportPoint(-axis);
+                    var overlap = Vector3.Project((extend1 - extend2), axis);
+
+                    // move candidate
+                    float move = Vector3.Dot(overlap, axis);
+                    requiredMove = Mathf.Min(requiredMove, move);
+                }
+
+                var err = Vector3.zero;
+                if (requiredMove &lt;= 1.5f * veh1.vehicleCollider.radius)
+                    err = -dir * requiredMove;
+
+                // add a minimum bounce
+                err -= (0.2f / maxIter) * dir;
+
+                var cor1 = veh2.mass / (veh1.mass + veh2.mass) * err;
+                var cor2 = -veh1.mass / (veh1.mass + veh2.mass) * err;
+
+                Debug.Log($&quot;Collision err length = {err.magnitude}: cor1 = {cor1}, cor2 = {cor2}&quot;);
+
+                var o1 = veh1.position;
+                var o2 = veh2.position;
+                veh1.ConstraintMove(cor1, 1);
+                veh2.ConstraintMove(cor2, 1);
+            }
+        }
+        Debug.Log($&quot;Vehicle Collisions resolved after {iter} iterations.&quot;);
+    }
+
+    private List&lt;(IVehicle, IVehicle)&gt; GetOverlaps()
+    {
+        var overlaps = new List&lt;(IVehicle, IVehicle)&gt;();
+
+        int N = vehicles.Count;
+        for (int i=0; i&lt;N; i++)
+        {
+            var v1 = vehicles[i];
+            for (int j = i+1; j &lt; N; j++)
+            {
+                var v2 = vehicles[j];
+                if (v1.Overlaps(v2))
+                {
+                    overlaps.Add((v1, v2));
+                    Debug.Log($&quot; Overlap on vehicles {v1.name} and {v2.name}&quot;);
+                }
+            }
+        }
+
+        return overlaps;
+    }
+}
+</code></pre>
+<h2 id="whats-next-for-collision-handling">What's next for collision handling?</h2>
+<p>So this routine has multiple issues. For one, the interfaces are not good yet. Since the vehicles will end up being composed from multiple sub-colliders, the vehicles themself currently have a method to test for overlap. It could be argued that this should stay within the vehicle colliders or be taken care of by the collision handler. Since vehicle collision is calculated from the projection overlap, the minimum overlap can be found in this routine already, so the overlap query could return this information already. </p>
+<p>More important: when the difference between vehicle speeds becomes larger, there is a chance now that vehicles tunnel through each other. The vehicle movement is already performed in substeps, and instead of having all vehicle movements carried out in the Update-cycle, and collisions being resolved during <code>LateUpdate</code>, the logic could be changed so that in every substep, all vehicles are moved and collision is tested and resolved immediately afterwards.</p>
+<p>If the top vehicle speed would be around <span class="arithmatex">\(450\text{ m/s}\)</span>, and vehicles have a typical length of <span class="arithmatex">\(5.5\text{ m}\)</span>, that means that substeps should not be longer than <span class="arithmatex">\(6.1 ms\)</span>. This would be achieved by 3 substeps at <span class="arithmatex">\(60\)</span> fps. </p>
+<h2 id="something-extra-radial-points">Something Extra: Radial Points</h2>
+<p>Before looking at boxes, I started off with elongated spheres, and overlap was approximated from radial points. When I switched to box colliders, I thus implemented a radial point method first. While this method is currently unused, I still found the algorithm conceptually interesting. Here it is:</p>
+<pre><code class="language-csharp">public (Vector3 radialPoint, Vector3 normal) RadialPointBox(Vector3 direction)
+{
+    // Computes the point on a box in a given direction d0 from the center
+    // IDEA point on plane: 
+    // 1) the point P=t*d0 lies on the box up plane if &lt;P,u&gt; = b/2
+    // 2) thus, &lt;P,u&gt; = t*&lt;d0,u&gt; = b/2 =&gt; t = b/(2*&lt;d0,u&gt;)
+    // IDEA nearest point:
+    // 3) the point in direction d0 can be computed on all planes
+    // 4) the radial point on the box is the one with smallest t
+
+    // direction from center outward
+    direction.Normalize();
+
+    // local coordinates
+    float dx = Vector3.Dot(direction, right);
+    float dy = Vector3.Dot(direction, up);
+    float dz = Vector3.Dot(direction, forward);
+
+    // find points on surfaces
+    float hx = 0.5f * a;
+    float hy = 0.5f * b;
+    float hz = 0.5f * c;
+
+    float tx = (Mathf.Abs(dx) &gt; 1e-6f) ? hx / Mathf.Abs(dx) : float.PositiveInfinity;
+    float ty = (Mathf.Abs(dy) &gt; 1e-6f) ? hy / Mathf.Abs(dy) : float.PositiveInfinity;
+    float tz = (Mathf.Abs(dz) &gt; 1e-6f) ? hz / Mathf.Abs(dz) : float.PositiveInfinity;
+
+    // return nearest
+    float t = float.PositiveInfinity;
+    Vector3 n = Vector3.zero;
+    if (tx &lt; t) { t = tx; n = Mathf.Sign(dx)*right; }
+    if (ty &lt; t) { t = ty; n = Mathf.Sign(dy)*up; }
+    if (tz &lt; t) { t = tz; n = Mathf.Sign(dz)*forward; }
+
+    return (transform.position + t * direction, n);
+}
+</code></pre>
+<p>The idea here is the following: the surfaces of the bounding box are subsets of a plane. E.g. in case of the upper surface that plane would be parallel to the right and forward direction and located <span class="arithmatex">\((b/2)\)</span> away from the center point. A point <span class="arithmatex">\(\mathbf{P}\)</span> that is located on that plane thus needs to fulfill </p>
+<div class="arithmatex">\[\mathbf{P}\cdot\mathbf{u}=b/2\]</div>
+<p>where <span class="arithmatex">\(\mathbf{u}\)</span> is the vector pointing in the direction of <code>transform.up</code>. From the center point, the direction of <span class="arithmatex">\(\mathbf{P}\)</span> is <span class="arithmatex">\(\mathbf{d}_0\)</span>, so that</p>
+<div class="arithmatex">\[t\mathbf{d}_0 = \mathbf{P}.\]</div>
+<p>Thus, the intersection point <span class="arithmatex">\(\mathbf{P}\)</span> of a line along <span class="arithmatex">\(\mathbf{d}_0\)</span> can be computed from </p>
+<div class="arithmatex">\[t = \frac{b}{2(\mathbf{d}_0\cdot\mathbf{u})}.\]</div>
+<p>The box has six surfaces, and all of them are subsets of planes. Up to three of them will have an intersection point along a given direction from the center point. The one with the shortest distance is the one that is actually located on the bounds. The same logic allows to determine the corresponding normal vector too. </p>
+<p>But the radial point is <em>not</em> the nearest point to an arbitrary point along <span class="arithmatex">\(\mathbf{d}_0\)</span>. </p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
